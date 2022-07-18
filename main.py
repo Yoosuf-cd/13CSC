@@ -94,11 +94,7 @@ class Second(Frame):
     # maths
   
     self.take_quiz = Button(self, text="Take Quiz", font=("Arial", 15), command=lambda: controller.show_frame(QuestionsContainer))
-    self.take_quiz.place(x=340, y=400)
-  
-  
-    self.next_button = Button(self, text="Next", font=("Arial", 15), command=lambda: controller.show_frame(Third))
-    self.next_button.place(x=650, y=450)
+    self.take_quiz.place(x=650, y=450)
     
     self.back_button = Button(self, text="Back", font=("Arial", 15), command=lambda: controller.show_frame(Start))
     self.back_button.place(x=100, y=450)
@@ -139,10 +135,10 @@ class QuestionsContainer(Frame):
     
     self.create_question_answers()
 
-    self.next_button = Button(self, text="Next", font=("Arial", 15), command=lambda: controller.show_frame(Third))
-    self.next_button.place(x=650, y=450)
+    self.exit_button = Button(self, text="Exit", font=("Arial", 15), command=lambda: controller.show_frame(Start))
+    self.exit_button.place(x=650, y=450)
     
-    self.back_button = Button(self, text="Back", font=("Arial", 15), command=lambda: controller.show_frame(Start))
+    self.back_button = Button(self, text="Back", font=("Arial", 15), command=lambda: controller.show_frame(Second))
     self.back_button.place(x=100, y=450)
 
   '''
@@ -175,7 +171,9 @@ class QuestionsContainer(Frame):
     if self.current_question_number <= len(self.questions):
       for btn in self.buttons:
         btn.destroy()
-  
+      
+      self.title_label.destroy()
+      
       self.current_question = self.questions[self.get_random_question_index()]
       self.create_question_answers()
     else:
@@ -223,7 +221,7 @@ class Application(Tk):
     def show_frame(self, page):
         frame = self.frames[page]
         frame.tkraise()
-        self.title("Application")
+        self.title("Maths & Sceince Quiz")
 
 class End(Frame):
   def __init__(self, parent, controller):
@@ -237,16 +235,30 @@ class End(Frame):
     data = f.read()
     self.answers = json.loads(data)
     self.passing_score = (self.answers["correct"] + self.answers["incorrect"]) // 2
-    
+    self.correct_score = self.answers["correct"]
     
     self.title_label = Label(self, text="What is your score?", bg = "ivory", font=("Arial Bold", 20))
     self.title_label.place(x=40, y=80)  
 
-    self.your_score = Label(self, text="You got: {}".format(self.answers["correct"]), bg = "ivory", font=("Arial Bold", 20))
-    self.your_score.place(x=40, y=120)
+    self.your_score = Label(self, text="You got: {}".format(self.correct_score), bg = "ivory", font=("Arial Bold", 20))
+    self.your_score.place(x=40, y=180)
 
     self.your_score = Label(self, text="Passing score: {}".format(self.passing_score), bg = "ivory", font=("Arial Bold", 20))
-    self.your_score.place(x=40, y=160)    
+    self.your_score.place(x=40, y=220)    
+
+    self.pass_or_fail = ""
+
+    # if you got >= to passing_score
+    # self.pass_or_fail = "passed" else self.pass_or_fail = "fail"
+
+    if self.correct_score >= self.passing_score:
+      self.pass_or_fail = "passed"
+    else:
+      self.pass_or_fail = "failed"
+      
+    
+    self.your_score = Label(self, text="You have {}".format(self.pass_or_fail).format(self.passing_score), bg = "ivory", font=("Arial Bold", 20))
+    self.your_score.place(x=40, y=290)  
     
     
     self.home_button = Button(self, text="Home", font=("Arial", 15), command=lambda: controller.show_frame(Start))
