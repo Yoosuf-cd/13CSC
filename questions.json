@@ -1,0 +1,102 @@
+[
+  {
+    "question": "123+4-5+67-89",
+    "answers": ["100", "102", "96", "110"],
+    "correct_answer": "100"
+  },
+  {
+    "question": "14+21",
+    "answers": ["38", "36", "35", "34"],
+    "correct_answer": "35"
+  },
+  {
+    "question": "9 x 12",
+    "answers": ["99", "100", "106", "108"],
+    "correct_answer": "108"
+  },
+  {
+    "question": "What comes after 16?",
+    "answers": ["17", "18", "19", "21"],
+    "correct_answer": "abc 1"
+  },
+  {
+    "question": "21+42-2",
+    "answers": ["61", "56", "70", "65"],
+    "correct_answer": "61"
+  },
+  {
+    "question": "100 x 20",
+    "answers": ["2000", "1900", "200", "1000"],
+    "correct_answer": "2000"
+  },
+  {
+    "question": "20 + 13",
+    "answers": ["33", "34", "32", "38"],
+    "correct_answer": "33"
+  },
+  {
+    "question": "3(2)",
+    "answers": ["3", "6", "10", "9"],
+    "correct_answer": "6"
+  },
+  {
+    "question": "3 x 3 x 3",
+    "answers": ["32", "29", "48", "27"],
+    "correct_answer": "27"
+  },
+  {
+    "question": "90 - 36",
+    "answers": ["56", "63", "54", "64"],
+    "correct_answer": "54"
+  },
+  {
+    "question": "What does DNA stand for?",
+    "answers": ["Deoxyribonucleic Acid", "Dieoxyribonucleic Acid", "Deoxyribonucleic Acit", "None Of The Above"],
+    "correct_answer": "Deoxyribonucleic Acid"
+  },
+  {
+    "question": "How many bones are in the human body?",
+    "answers": ["200", "201", "204", "206"],
+    "correct_answer": "206"
+  },
+  {
+    "question": "What is the hardest natural substance on Earth?",
+    "answers": ["Wurtzite Boron Nitride", "Diamond", "Gold", "Silver"],
+    "correct_answer": "Diamond"
+  },
+  {
+    "question": "What Does 'He' stand for in the periodic table?",
+    "answers": ["Hyrdo", "Hydrochloric", "Helium", "Hydrogen"],
+    "correct_answer": "Helium"
+  },
+  {
+    "question": "What is the biggest planet in our solar system?",
+    "answers": ["Jupiter", "Saturn", "Mars", "The Sun"],
+    "correct_answer": "Jupiter"
+  },
+  {
+    "question": "What is 'B' in the periodic table?",
+    "answers": ["Borton", "Borium", "Berium", "Boron"],
+    "correct_answer": "Boron"
+  },
+  {
+    "question": "What is 'Li' in the periodic table?",
+    "answers": ["Lithium", "Linthum", "Listim", "Lime"],
+    "correct_answer": "Lithium"
+  },
+  {
+    "question": "What is 'Fe' in the periodic table?",
+    "answers": ["Silver", "Gold", "Iron", "felium"],
+    "correct_answer": "abc 1"
+  },
+  {
+    "question": "True or False? Electrons are smaller than atoms.",
+    "answers": ["True", "False"],
+    "correct_answer": "True"
+  },
+  {
+    "question": "Does sound travel faster in the air or in water?",
+    "answers": ["Air", "Water"],
+    "correct_answer": "Water"
+  }
+]
