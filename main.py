@@ -123,26 +123,27 @@ class Third(Frame):
 
 class QuestionsContainer(Frame):
   def __init__(self, parent, controller):
-        Frame.__init__(self, parent)
-        self.questions = []
-        self.buttons = []
-        self.current_question_number = 1
-        
+    Frame.__init__(self, parent)
+    self.questions = []
+    self.buttons = []
+    self.current_question_number = 1
+    self.controller = controller
     
-        self.answer_score = {
-          "correct": 0,
-          "incorrect": 0
-        }
+
+    self.answer_score = {
+      "correct": 0,
+      "incorrect": 0
+    }
+
+    self.load_questions('questions.json')
     
-        self.load_questions('questions.json')
-        
-        self.create_question_answers()
+    self.create_question_answers()
+
+    self.next_button = Button(self, text="Next", font=("Arial", 15), command=lambda: controller.show_frame(Third))
+    self.next_button.place(x=650, y=450)
     
-        self.next_button = Button(self, text="Next", font=("Arial", 15), command=lambda: controller.show_frame(Third))
-        self.next_button.place(x=650, y=450)
-        
-        self.back_button = Button(self, text="Back", font=("Arial", 15), command=lambda: controller.show_frame(Start))
-        self.back_button.place(x=100, y=450)
+    self.back_button = Button(self, text="Back", font=("Arial", 15), command=lambda: controller.show_frame(Start))
+    self.back_button.place(x=100, y=450)
 
   '''
   call it validate_question
@@ -179,9 +180,11 @@ class QuestionsContainer(Frame):
       self.create_question_answers()
     else:
       print(self.answer_score)
-
+      # save correct and incorrect score to file.
+      with open('score.json', 'w') as fp:
+        json.dump(self.answer_score, fp)
     
-    
+      self.controller.show_frame(End)
     
   def get_random_question_index(self):
     # gets a random non repeated number from the number of 
@@ -210,7 +213,7 @@ class Application(Tk):
         self.window.grid_columnconfigure(0, minsize = 800)
         
         self.frames = {}
-        for F in (Start, Second, Third, QuestionsContainer):
+        for F in (Start, Second, Third, QuestionsContainer, End):
             frame = F(self.window, self)
             self.frames[F] = frame
             frame.grid(row = 0, column=0, sticky="nsew")
@@ -222,29 +225,33 @@ class Application(Tk):
         frame.tkraise()
         self.title("Application")
 
-class End:
-    def __init__(self):
-        background="white"
-        self.end_box= Toplevel(root)
-        self.end_box.title("End Box")
+class End(Frame):
+  def __init__(self, parent, controller):
+    
+    Frame.__init__(self, parent)
+    
+    self.configure(bg='ivory')
+  
+    # Read the saved score and display it.
+    f = open("score.json", "r")
+    data = f.read()
+    self.answers = json.loads(data)
+    self.passing_score = (self.answers["correct"] + self.answers["incorrect"]) // 2
+    
+    
+    self.title_label = Label(self, text="What is your score?", bg = "ivory", font=("Arial Bold", 20))
+    self.title_label.place(x=40, y=80)  
 
-        self.end_frame = Frame (self.end_box, width=1000, height=1000, bg=background)
-        self.end_frame.grid()
+    self.your_score = Label(self, text="You got: {}".format(self.answers["correct"]), bg = "ivory", font=("Arial Bold", 20))
+    self.your_score.place(x=40, y=120)
 
-        end_heading = Label (self.end_frame, text='Well Done', font=('Tw Cen MT', 22, 'bold'),fg='White', bg=background, pady=15)
-        end_heading.grid(row=0)
-
-        exit_button = Button (self.end_frame, text='Exit', width=10, bg='grey', font=('Tw Cen MT', 12, 'bold'),fg='black', command=self.close_end)
-        exit_button.grid(row=4, pady=20)
-        self.listLabel = Label(self.end_frame, text="1st Place Avaliable", font=("Tw Cen MT", 18), width=40, bg=background,fg="black", padx=10, pady=10)
-        self.listLabel.grid(column=0, row=2)
-
-        self.quit= Button(self.end_frame, text="Quit", font=("Helvetica", "13", "bold",))
-
-   
-    def close_end(self):
-        self.end_box.destroy()
-        root.withdraw()
+    self.your_score = Label(self, text="Passing score: {}".format(self.passing_score), bg = "ivory", font=("Arial Bold", 20))
+    self.your_score.place(x=40, y=160)    
+    
+    
+    self.home_button = Button(self, text="Home", font=("Arial", 15), command=lambda: controller.show_frame(Start))
+    self.home_button.place(x=650, y=450)
+      
 
       
 #start of program
