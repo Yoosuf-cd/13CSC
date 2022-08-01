@@ -87,7 +87,7 @@
   {
     "question": "What is 'Fe' in the periodic table?",
     "answers": ["Silver", "Gold", "Iron", "felium"],
-    "correct_answer": "abc 1"
+    "correct_answer": "Iron"
   },
   {
     "question": "True or False? Electrons are smaller than atoms.",

@@ -4,12 +4,15 @@ from tkinter import messagebox
 import json
 import random
 
+asked = []
 #A lambda function is a small anonymous function(usually we dont need to reuse it)
 #A lambda function can take any number of arguments, but can only have one expression 
 class Start(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
-        
+
+#First frame users will see which is the login screen 
+      
         self.border = LabelFrame(self, text='Login', bg='ivory', bd = 10, font=("Arial", 20))
         self.border.pack(fill="both", expand="yes", padx = 150, pady=150)
         
@@ -22,7 +25,9 @@ class Start(Frame):
         self.password_label.place(x=50, y=80)
         self.password_entry = Entry(self.border, width = 30, show='*', bd = 5)
         self.password_entry.place(x=180, y=80)
-        
+      
+#This is just the design layout numbers I used for the layout of my login screen, the password length, width, etc. 
+      
         def verify():
             try:
                 with open("users.txt", "r") as f:
@@ -38,6 +43,7 @@ class Start(Frame):
                         messagebox.showinfo("Error", "Please provide correct username and password!!")
             except:
                 messagebox.showinfo("Error", "Couldnt open file")
+#this is for when the users dont enter anything he program will say different messages for different empty slections the "except" code is for if users dont submit anything during the login fram and the "if" code is for when users dont submit anything during the register frame.
      
          
         self.submitbutton = Button(self.border, text="Submit", font=("Arial", 15), command=verify)
@@ -48,20 +54,22 @@ class Start(Frame):
             register_window.resizable(0,0)
             register_window.configure(bg="ivory")
             register_window.title("Register")
-            reg_name_label = Label(register_window, text="Username:", font=("Arial",15), bg="blue")
+            reg_name_label = Label(register_window, text="Username:", font=("Arial",15), bg="ivory")
             reg_name_label.place(x=10, y=10)
             reg_name_entry = Entry(register_window, width=30, bd=5)
             reg_name_entry.place(x = 200, y=10)
             
-            reg_password_label = Label(register_window, text="Password:", font=("Arial",15), bg="blue")
+            reg_password_label = Label(register_window, text="Password:", font=("Arial",15), bg="ivory")
             reg_password_label.place(x=10, y=60)
             reg_password_entry = Entry(register_window, width=30, show="*", bd=5)
             reg_password_entry.place(x = 200, y=60)
             
-            confirm_password_label = Label(register_window, text="Confirm Password:", font=("Arial",15), bg="blue")
+            confirm_password_label = Label(register_window, text="Confirm Password:", font=("Arial",15), bg="ivory")
             confirm_password_label.place(x=10, y=110)
             confirm_password_entry = Entry(register_window, width=30, show="*", bd=5)
             confirm_password_entry.place(x = 200, y=110)
+
+#register frame code above, this is the code that allows users to regirster and make an account that enable them to take the quiz.
             
             def check():
                 if reg_name_entry.get()!="" or reg_password_entry.get()!="" or confirm_password_entry.get()!="":
@@ -90,8 +98,8 @@ class Second(Frame):
     
     self.title_label = Label(self, text="Welcome To the General Mathematic & Scientific Quiz", bg = "ivory", font=("Arial Bold", 20))
     self.title_label.place(x=40, y=150)     
-
-    # maths
+#this is the second frame, this is the frame the program will take the users to once they have signed in.
+# maths
   
     self.take_quiz = Button(self, text="Take Quiz", font=("Arial", 15), command=lambda: controller.show_frame(QuestionsContainer))
     self.take_quiz.place(x=650, y=450)
@@ -131,6 +139,8 @@ class QuestionsContainer(Frame):
       "incorrect": 0
     }
 
+#This code is for the program to collect the data that the users put in, whether they get it correct or incorrect. This is also used to transfer the data to the data section which is used to calculate whether the user passes or not.
+    
     self.load_questions('questions.json')
     
     self.create_question_answers()
@@ -141,6 +151,7 @@ class QuestionsContainer(Frame):
     self.back_button = Button(self, text="Back", font=("Arial", 15), command=lambda: controller.show_frame(Second))
     self.back_button.place(x=100, y=450)
 
+#this is where the program takes a random question from my questions.json file and imports them to the quiz.
   '''
   call it validate_question
     - takes question
@@ -157,6 +168,8 @@ class QuestionsContainer(Frame):
         self.offset += 60
         self.buttons.append(answer_btn)
 
+#offset = the spacing and alignment,
+
   def validate_question(self, selected_answer):
     '''
     if we select the right answer: we add 1 to correct otherwise we add 1 to incorrect.
@@ -168,6 +181,8 @@ class QuestionsContainer(Frame):
     else:
       self.answer_score['incorrect'] += 1
 
+#this is where the program adds a point for whatever the user get incorrect +1 correct +1. 
+    
     if self.current_question_number <= len(self.questions):
       for btn in self.buttons:
         btn.destroy()
@@ -178,7 +193,7 @@ class QuestionsContainer(Frame):
       self.create_question_answers()
     else:
       print(self.answer_score)
-      # save correct and incorrect score to file.
+      #save correct and incorrect score to file.
       with open('score.json', 'w') as fp:
         json.dump(self.answer_score, fp)
     
@@ -186,12 +201,17 @@ class QuestionsContainer(Frame):
     
   def get_random_question_index(self):
     # gets a random non repeated number from the number of 
+    global qnum
     no_of_questions = len(self.questions)
-    n = random.sample(range(no_of_questions), 1)
-    return n[0]
+    qnum = random.sample(range(no_of_questions), 1)
+    if qnum not in asked:
+      asked.append(qnum)
+    elif qnum in asked:
+      self.get_random_question_index()
+    return qnum[0]
   
   def load_questions(self, questions_file_name):
-    # reads the json file
+    #reads the json file
     f = open(questions_file_name)
     data = f.read()
     self.questions = json.loads(data)
@@ -216,7 +236,7 @@ class Application(Tk):
             self.frames[F] = frame
             frame.grid(row = 0, column=0, sticky="nsew")
             
-        self.show_frame(Second)
+        self.show_frame(Start)
         
     def show_frame(self, page):
         frame = self.frames[page]
@@ -230,7 +250,7 @@ class End(Frame):
     
     self.configure(bg='ivory')
   
-    # Read the saved score and display it.
+    #Read the saved score and display it.
     f = open("score.json", "r")
     data = f.read()
     self.answers = json.loads(data)
@@ -248,8 +268,8 @@ class End(Frame):
 
     self.pass_or_fail = ""
 
-    # if you got >= to passing_score
-    # self.pass_or_fail = "passed" else self.pass_or_fail = "fail"
+    #if you got >= to passing_score
+    #self.pass_or_fail = "passed" else self.pass_or_fail = "fail"
 
     if self.correct_score >= self.passing_score:
       self.pass_or_fail = "passed"
@@ -263,7 +283,7 @@ class End(Frame):
     
     self.home_button = Button(self, text="Home", font=("Arial", 15), command=lambda: controller.show_frame(Start))
     self.home_button.place(x=650, y=450)
-      
+
 
       
 #start of program
